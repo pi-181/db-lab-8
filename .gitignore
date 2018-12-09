@@ -1,0 +1,4 @@
+/.idea
+/node-modules
+/server/full-methods.js
+/server/test.js
