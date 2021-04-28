@@ -147,8 +147,43 @@ function bindEditRemoveListeners() {
 		})
 	});
 	$('.button-edit').on('click', function (e) {
-		var id = $(this).data('id');
-		console.log(id);
+		const btn = $(this);
+		const id = btn.data('id');
+
+		let desc = btn.closest('td').prev().prev();
+		let source = desc.prev();
+		let currency = source.prev();
+		let sum = currency.prev();
+		let date = sum.prev();
+
+		let data = {};
+		if (desc[0].innerText !== '-') data.description = desc[0].innerText;
+		if (currency[0].innerText !== '-') data.currency = currency[0].innerText;
+		if (source[0].innerText !== '-') data.source = source[0].innerText;
+		if (sum[0].innerText !== '-') data.sum = sum[0].innerText;
+		if (date[0].innerText !== '-') data.date = date[0].innerText;
+		data = JSON.stringify(data);
+
+		$.ajax({
+			url: server_url + 'operation/' + id,
+			data: data,
+			method: 'patch',
+			contentType: "application/json; charset=utf-8",
+			success: function (response) {
+				$loadingModal.hide();
+				$errorSpan.empty();
+				alert("Відредаговано!");
+				if (currentDataUrl) {
+					getData(currentDataUrl, true)
+				}
+			},
+			error: function (error) {
+				$loadingModal.hide();
+				$errorSpan.text(error.toString());
+				alert("Помилка!");
+			}
+		})
+
 	})
 }
 function getData(fetch_url, is_table) {

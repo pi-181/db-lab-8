@@ -33,7 +33,7 @@ var DataBase = function() {
 	};
 	this.updateInCollection = function (collectionName, id, new_data, callback) {
 		init(function () {
-			db.collection('currency').update({_id: ObjectId(id)}, { $set: new_data }, [false, true], callback);
+			db.collection(collectionName).updateOne({_id: ObjectId(id)}, { $set: new_data }, callback);
 		})
 	};
 	this.groupByCurrency = function (callback) {

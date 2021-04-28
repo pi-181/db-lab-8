@@ -57,6 +57,17 @@ app.post('/operation', jsonParser, function (req, res) {
 	})
 });
 
+app.patch('/operation/:opId', jsonParser, function (req, res) {
+	res.setHeader('Content-Type', 'application/json');
+	db.updateInCollection('operations', req.params.opId, req.body, function (error, result) {
+		if (!error) {
+			res.status(200).send(JSON.stringify(result));
+		} else {
+			res.status(400).send(JSON.stringify({"error": error}));
+		}
+	})
+});
+
 app.delete('/operation', jsonParser, function (req, res) {
 	res.setHeader('Content-Type', 'application/json');
 	db.removeFromCollection('operations', req.body.id, function (error, result) {
