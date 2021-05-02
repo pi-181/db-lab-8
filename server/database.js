@@ -41,7 +41,24 @@ const DataBase = function () {
   };
 
   this.groupByCurrency = function (callback) {
-    callback(null, []);
+    init(function () {
+      db.collection('operations').aggregate(
+        [
+          {
+            $group: {
+              _id: '$currency',
+              sum: {$sum: {$toInt: '$sum'}},
+            }
+          },
+          {
+            $project: {
+              _id: 0,
+              currency: "$_id",
+              sum: 1
+            }
+          }
+        ], callback)
+    })
   };
 
   this.greatSpending = function (callback) {
@@ -50,7 +67,7 @@ const DataBase = function () {
 
   this.getSpendingWithExchangeRate = function (callback) {
     init(function () {
-      db.collection('operations').aggregate([
+      db.operations.aggregate([
         {
           $lookup:
             {

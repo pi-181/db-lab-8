@@ -61,21 +61,8 @@ $(function () {
     });
 
     $("#button-group").on('click', function (e) {
-      $loadingModal.show();
-      $.ajax({
-        method: 'get',
-        url: server_url + 'group_by_currency',
-        contentType: "application/json; charset=utf-8",
-        success: function (response) {
-          $loadingModal.hide();
-          $errorSpan.empty();
-          console.log(response);
-        },
-        error: function (error) {
-          $loadingModal.hide();
-          $errorSpan.text(error.responseText);
-        }
-      })
+      currentDataUrl = server_url + 'group_by_currency';
+      getData(currentDataUrl, false);
     });
 
     $("#button-gt").on('click', function (e) {
@@ -246,7 +233,8 @@ function fillText(data) {
       .replace('{currency}', data[i].currency || '-');
   }
   $("#div-table-result").hide();
-  $("#div-text-result").empty().html(resultRows).show();
+  $("#text-result-space").empty().html(resultRows);
+  $("#div-text-result").show();
 }
 
 function serializeForm(form) {
