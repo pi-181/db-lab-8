@@ -84,21 +84,8 @@ $(function () {
     });
 
     $("#button-convert").on('click', function (e) {
-      $loadingModal.show();
-      $.ajax({
-        method: 'get',
-        url: server_url + 'convert_uah',
-        contentType: "application/json; charset=utf-8",
-        success: function (response) {
-          $loadingModal.hide();
-          $errorSpan.empty();
-          console.log(response);
-        },
-        error: function (error) {
-          $loadingModal.hide();
-          $errorSpan.text(error.responseText);
-        }
-      })
+      currentDataUrl = server_url + 'convert_uah';
+      getData(currentDataUrl, true);
     })
 
   } catch (e) {

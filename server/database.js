@@ -92,7 +92,29 @@ const DataBase = function () {
   };
 
   this.convertIntoUah = function (callback) {
-    callback(null, []);
+    init(function () {
+      db.collection('operations').aggregate([
+        {
+          $lookup:
+            {
+              from: "currency",
+              localField: "currency",
+              foreignField: "name",
+              as: "rate"
+            }
+        },
+        {$unwind: {path: "$rate"}},
+        {$addFields: {convertedSum: {$multiply: [{$ifNull: ["$rate.exchangeRate", 1]}, {$toDouble: "$sum"}]}}},
+        {$set: {sum: "$convertedSum", currency: "UAH"}},
+        {
+          $project: {
+            rate: 0,
+            type: 0,
+            convertedSum: 0,
+          }
+        },
+      ], callback);
+    });
   };
 };
 
